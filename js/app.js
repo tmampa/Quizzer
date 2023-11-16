@@ -1,7 +1,4 @@
-let users = [{
-    username: 'titan955',
-    score: []
-}]
+let users = []
 
 let questions = [
     {
@@ -31,10 +28,11 @@ let questions = [
     },
 ];
 
+let startForm = document.getElementById('startForm');
+let usernameInput = document.getElementById('usernameInput');
 
-
-function startQuiz() {
-    let user = users[0];
+function startQuiz(username) {
+    let user = {username: username, score: []}; // Create a user object to store the user's score
     let app = document.getElementById('app');
     let questionIndex = 0;
 
@@ -52,11 +50,13 @@ function startQuiz() {
         question.options.forEach((option, optionIndex) => {
             let optionElement = document.createElement('button');
             optionElement.textContent = option;
-            optionElement.addEventListener('click', function() {
+            optionElement.addEventListener('click', function () {
                 if (optionIndex === question.answer) {
                     user.score.push(1);
+                    optionElement.className = 'border-green-400';
                 } else {
                     user.score.push(0);
+                    optionElement.className = 'border-green-400';
                 }
                 questionIndex++;
                 if (questionIndex < questions.length) {
@@ -68,21 +68,49 @@ function startQuiz() {
                     localStorage.setItem('scores', JSON.stringify(scores)); // Save the scores array to local storage
 
                     app.innerHTML = ''; // Clear the app element
+                    // Sort the scores array in descending order based on the score
+                    scores.sort((a, b) => b.score - a.score);
 
-                    // Display all scores
-                    scores.forEach(score => {
-                        let scoreElement = document.createElement('p');
-                        scoreElement.textContent = score.username + ': ' + score.score + '%';
-                        app.appendChild(scoreElement);
+
+                    // ... existing code ...
+
+// Create a heading for the leaderboard
+                    let leaderboardHeading = document.createElement('h2');
+                    leaderboardHeading.textContent = 'Leaderboard';
+                    app.appendChild(leaderboardHeading);
+
+// Create an ordered list for the leaderboard
+                    let leaderboardList = document.createElement('ol');
+
+// Add each score as a list item in the list
+                    scores.forEach((score, index) => {
+                        let scoreItem = document.createElement('li');
+
+                        // Create the score text
+                        let scoreText = document.createTextNode(score.username + ': ' + score.score + '%');
+                        scoreItem.appendChild(scoreText);
+
+                        // Highlight the top scorer
+                        if (index === 0) {
+                            scoreItem.style.fontWeight = 'bold';
+                            scoreItem.style.color = 'green';
+                        }
+
+                        // Add the score item to the list
+                        leaderboardList.appendChild(scoreItem);
                     });
 
+// Add the leaderboard list to the app element
+                    app.appendChild(leaderboardList);
                     // Add a "Play Again" button
                     let playAgainButton = document.createElement('button');
                     playAgainButton.textContent = 'Play Again';
-                    playAgainButton.addEventListener('click', function() {
+                    playAgainButton.addEventListener('click', function () {
                         user.score = []; // Reset the user's score
                         questionIndex = 0; // Reset the question index
                         displayQuestion(); // Start the quiz again
+                        startForm.style.display = 'block'; // Display the start form
+                        usernameInput.value = ''; // Clear the username input field
                     });
                     app.appendChild(playAgainButton);
                 }
@@ -94,4 +122,15 @@ function startQuiz() {
     displayQuestion(); // Start the quiz by displaying the first question
 }
 
-startQuiz();
+function startApp() {
+
+
+    startForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        let username = usernameInput.value;
+        startQuiz(username);
+        startForm.style.display = 'none';
+    });
+}
+
+startApp()

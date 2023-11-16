@@ -34,23 +34,31 @@ function startQuiz(username) {
 
         let question = questions[questionIndex];
         let questionElement = document.createElement('p');
+        questionElement.className = 'text-center text-2xl font-bold p-4 bg-yellow-300 rounded-lg m-8 w-full py-12';
         questionElement.textContent = question.question;
-        app.appendChild(questionElement);
+
+        let questionDiv = document.createElement('div');
+        questionDiv.className = 'flex flex-col justify-center items-center space-y-4';
+        questionDiv.appendChild(questionElement);
 
         question.options.forEach((option, optionIndex) => {
+            let footer = document.getElementById('footer')
+            footer.innerHTML = ''
             let optionElement = document.createElement('button');
+            optionElement.className = 'border border-gray-400 rounded-lg p-4 w-full bg-white text-gray-700 font-semibold hover:bg-gray-100';
             optionElement.textContent = option;
             optionElement.addEventListener('click', function () {
                 if (optionIndex === question.answer) {
                     user.score.push(1);
-                    optionElement.className = 'border-green-400';
+                    optionElement.className = 'border-4 border-green-400 rounded-lg p-4 w-full bg-white text-gray-700 font-semibold hover:bg-gray-100';
                 } else {
                     user.score.push(0);
-                    optionElement.className = 'border-green-400';
+                    optionElement.className = 'border-4 border-red-400 rounded-lg p-4 w-full bg-white text-gray-700 font-semibold hover:bg-gray-100';
                 }
+
                 questionIndex++;
                 if (questionIndex < questions.length) {
-                    displayQuestion(); // Display the next question
+                    setTimeout(displayQuestion, 1000) // Display the next question
                 } else {
                     let scoreSum = user.score.reduce((a, b) => a + b, 0);
                     let scorePercent = (scoreSum / questions.length) * 100;
@@ -62,40 +70,58 @@ function startQuiz(username) {
                     scores.sort((a, b) => b.score - a.score);
 
 
-                    // ... existing code ...
+                    let leaderboardTable = document.createElement('table');
+                    leaderboardTable.className = 'leaderboard-table';
 
-                    // Create a heading for the leaderboard
-                    let leaderboardHeading = document.createElement('h2');
-                    leaderboardHeading.textContent = 'Leaderboard';
-                    app.appendChild(leaderboardHeading);
+// Create a thead for the table headings
+                    let tableHead = document.createElement('thead');
+                    let headingRow = document.createElement('tr');
+                    let usernameHeading = document.createElement('th');
+                    usernameHeading.textContent = 'Username';
+                    let scoreHeading = document.createElement('th');
+                    scoreHeading.textContent = 'Score';
+                    headingRow.appendChild(usernameHeading);
+                    headingRow.appendChild(scoreHeading);
+                    tableHead.appendChild(headingRow);
+                    leaderboardTable.appendChild(tableHead);
 
-                    // Create an ordered list for the leaderboard
-                    let leaderboardList = document.createElement('ol');
-                    leaderboardList.className = 'list-decimal';
+// Create a tbody for the table body
+                    let tableBody = document.createElement('tbody');
 
-                    // Add each score as a list item in the list
+// Add each score as a row in the table
                     scores.forEach((score, index) => {
-                        let scoreItem = document.createElement('li');
+                        let scoreRow = document.createElement('tr');
 
-                        // Create the score text
-                        let scoreText = document.createTextNode(score.username + ': ' + score.score + '%');
-                        scoreItem.appendChild(scoreText);
+                        // Create the username cell
+                        let usernameCell = document.createElement('td');
+                        usernameCell.textContent = score.username;
+                        scoreRow.appendChild(usernameCell);
+
+                        // Create the score cell
+                        let scoreCell = document.createElement('td');
+                        scoreCell.textContent = score.score + '%';
+                        scoreRow.appendChild(scoreCell);
 
                         // Highlight the top scorer
                         if (index === 0) {
-                            scoreItem.style.fontWeight = 'bold';
-                            scoreItem.style.color = 'green';
+                            scoreRow.style.fontWeight = 'bold';
+                            scoreRow.style.color = 'green';
                         }
 
-                        // Add the score item to the list
-                        leaderboardList.appendChild(scoreItem);
+                        // Add the score row to the table body
+                        tableBody.appendChild(scoreRow);
                     });
 
-                    // Add the leaderboard list to the app element
-                    app.appendChild(leaderboardList);
+// Add the table body to the table
+                    leaderboardTable.appendChild(tableBody);
+
+// Add the leaderboard table to the app element
+                    app.appendChild(leaderboardTable);
+
                     // Add a "Play Again" button
                     let playAgainButton = document.createElement('button');
                     playAgainButton.textContent = 'Play Again';
+                    playAgainButton.className = 'centered-button'; // Add the new class to the button
                     playAgainButton.addEventListener('click', function () {
                         user.score = []; // Reset the user's score
                         questionIndex = 0; // Reset the question index
@@ -105,9 +131,11 @@ function startQuiz(username) {
                         usernameInput.value = ''; // Clear the username input field
                     });
                     app.appendChild(playAgainButton);
+
                 }
             });
-            app.appendChild(optionElement);
+            questionDiv.appendChild(optionElement);
+            app.appendChild(questionDiv);
         });
     }
 

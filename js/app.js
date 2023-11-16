@@ -1,32 +1,22 @@
 let users = []
 
-let questions = [
-    {
-        question: 'Who wrote the novel 1984?',
-        options: ['George Orwell', 'Aldous Huxley', 'Ray Bradbury', 'J.K. Rowling'],
-        answer: 0
-    },
-    {
-        question: 'What is the capital of Australia?',
-        options: ['Sydney', 'Melbourne', 'Canberra', 'Perth'],
-        answer: 2
-    },
-    {
-        question: 'Who painted the Mona Lisa?',
-        options: ['Vincent Van Gogh', 'Leonardo Da Vinci', 'Pablo Picasso', 'Claude Monet'],
-        answer: 1
-    },
-    {
-        question: 'What is the chemical symbol for Gold?',
-        options: ['G', 'Au', 'Ag', 'Go'],
-        answer: 1
-    },
-    {
-        question: 'Who discovered penicillin?',
-        options: ['Marie Curie', 'Alexander Fleming', 'Louis Pasteur', 'Albert Einstein'],
-        answer: 1
-    },
-];
+let questions = [{
+    question: 'Who wrote the novel 1984?',
+    options: ['George Orwell', 'Aldous Huxley', 'Ray Bradbury', 'J.K. Rowling'],
+    answer: 0
+}, {
+    question: 'What is the capital of Australia?', options: ['Sydney', 'Melbourne', 'Canberra', 'Perth'], answer: 2
+}, {
+    question: 'Who painted the Mona Lisa?',
+    options: ['Vincent Van Gogh', 'Leonardo Da Vinci', 'Pablo Picasso', 'Claude Monet'],
+    answer: 1
+}, {
+    question: 'What is the chemical symbol for Gold?', options: ['G', 'Au', 'Ag', 'Go'], answer: 1
+}, {
+    question: 'Who discovered penicillin?',
+    options: ['Marie Curie', 'Alexander Fleming', 'Louis Pasteur', 'Albert Einstein'],
+    answer: 1
+},];
 
 let startForm = document.getElementById('startForm');
 let usernameInput = document.getElementById('usernameInput');
@@ -74,15 +64,16 @@ function startQuiz(username) {
 
                     // ... existing code ...
 
-// Create a heading for the leaderboard
+                    // Create a heading for the leaderboard
                     let leaderboardHeading = document.createElement('h2');
                     leaderboardHeading.textContent = 'Leaderboard';
                     app.appendChild(leaderboardHeading);
 
-// Create an ordered list for the leaderboard
+                    // Create an ordered list for the leaderboard
                     let leaderboardList = document.createElement('ol');
+                    leaderboardList.className = 'list-decimal';
 
-// Add each score as a list item in the list
+                    // Add each score as a list item in the list
                     scores.forEach((score, index) => {
                         let scoreItem = document.createElement('li');
 
@@ -100,7 +91,7 @@ function startQuiz(username) {
                         leaderboardList.appendChild(scoreItem);
                     });
 
-// Add the leaderboard list to the app element
+                    // Add the leaderboard list to the app element
                     app.appendChild(leaderboardList);
                     // Add a "Play Again" button
                     let playAgainButton = document.createElement('button');
@@ -110,6 +101,7 @@ function startQuiz(username) {
                         questionIndex = 0; // Reset the question index
                         displayQuestion(); // Start the quiz again
                         startForm.style.display = 'block'; // Display the start form
+                        app.innerHTML = ''; // Clear the app element
                         usernameInput.value = ''; // Clear the username input field
                     });
                     app.appendChild(playAgainButton);
@@ -123,8 +115,6 @@ function startQuiz(username) {
 }
 
 function startApp() {
-
-
     startForm.addEventListener('submit', function (event) {
         event.preventDefault();
         let username = usernameInput.value;

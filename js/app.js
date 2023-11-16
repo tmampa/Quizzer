@@ -50,10 +50,10 @@ function startQuiz(username) {
             optionElement.addEventListener('click', function () {
                 if (optionIndex === question.answer) {
                     user.score.push(1);
-                    optionElement.className = 'border-4 border-green-400 rounded-lg p-4 w-full bg-white text-gray-700 font-semibold hover:bg-gray-100';
+                    optionElement.className = "border-4 border-green-400 rounded-lg p-4 w-full bg-white text-gray-700 font-semibold hover:bg-gray-100";
                 } else {
                     user.score.push(0);
-                    optionElement.className = 'border-4 border-red-400 rounded-lg p-4 w-full bg-white text-gray-700 font-semibold hover:bg-gray-100';
+                    optionElement.className = "border-4 border-red-400 rounded-lg p-4 w-full bg-white text-gray-700 font-semibold hover:bg-gray-100";
                 }
 
                 questionIndex++;
